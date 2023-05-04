@@ -43,24 +43,23 @@ func TestParserStructure(t *testing.T) {
 			op:      nil,
 		},
 	}
-	// created parser
-	parser := &lang.Parser{}
 
-	for _, tc := range tests { 
+	for _, tc := range tests { //created checking loop
 		t.Run(tc.name, func(t *testing.T) {
+			parser := &lang.Parser{}
 			ops, err := parser.Parse(strings.NewReader(tc.command))
-			if tc.op == nil {                                       
+			if tc.op == nil {
 				assert.Error(t, err)
-			} else { 
-				require.NoError(t, err)         
-				require.Len(t, ops, 1)          
-				assert.IsType(t, tc.op, ops[0]) 
+			} else {
+				require.NoError(t, err) // checking errors
+				assert.IsType(t, tc.op, ops[1])
+				assert.Equal(t, tc.op, ops[1])
 			}
 		})
 	}
 }
 
-func TestParserFunctions(t *testing.T) {
+func TestParserFuncions(t *testing.T) {
 	tests := []struct {
 		name    string
 		command string
@@ -77,20 +76,22 @@ func TestParserFunctions(t *testing.T) {
 			op:      painter.OperationFunc(painter.GreenFill),
 		},
 		{
-			name:    "cleare all screen",
+			name:    "reset screen",
 			command: "reset",
 			op:      painter.OperationFunc(painter.ClearScreen),
 		},
 	}
 	// created Parser object
 	parser := &lang.Parser{}
-	// checking loop
+
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			ops, err := parser.Parse(strings.NewReader(tc.command))
-			require.NoError(t, err)   
-			require.Len(t, ops, 1)         
-			assert.IsType(t, tc.op, ops[0]) 
+
+			require.NoError(t, err)
+			require.Len(t, ops, 1)
+			assert.IsType(t, tc.op, ops[0])
+
 		})
 	}
 }
